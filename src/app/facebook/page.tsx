@@ -2,8 +2,6 @@
 import { useRouter } from 'next/navigation'
 import { Button } from 'react-bootstrap';
 
-
-
 const Facebook = () => {
     const router = useRouter()
 
@@ -17,8 +15,6 @@ const Facebook = () => {
                 >
                     back home
                 </button>
-
-
             </div>
         </>
     )
