@@ -4,10 +4,7 @@ import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import {useState} from "react";
 import {toast} from "react-toastify";
-import {Simulate} from "react-dom/test-utils";
-import resize = Simulate.resize;
-import {log} from "util";
-
+import { mutate } from "swr"
 
 interface IProps {
     show: boolean;
@@ -55,6 +52,7 @@ const CreateModal = (props: IProps) => {
                 if (res) {
                     toast.success('Create successfully!')
                     handleClose();
+                    mutate('http://localhost:8000/blogs')
                 }
             })
     }

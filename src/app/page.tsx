@@ -40,7 +40,7 @@ export default function Home() {
                 </li>
             </ul>
             <AppTable
-                blogs={data}
+                blogs={data?.sort((a: any, b: any) => b.id - a.id)}
             ></AppTable>
         </div>
     )
