@@ -3,6 +3,10 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import {useState} from "react";
+import {toast} from "react-toastify";
+import {Simulate} from "react-dom/test-utils";
+import resize = Simulate.resize;
+import {log} from "util";
 
 
 interface IProps {
@@ -28,9 +32,31 @@ const CreateModal = (props: IProps) => {
         handleReset()
     }
 
-    const handleSubmit = () => {
-        const data = {title, author, content}
-        console.log(data)
+    const handleSubmit = async () => {
+        const dataBody = {title, author, content}
+
+        //validate
+        if (!title || !author || !content) {
+            toast.error('Missing some field!')
+            return
+        }
+
+        fetch("http://localhost:8000/blogs",
+            {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: "POST",
+                body: JSON.stringify(dataBody)
+            })
+            .then(res => res.json())
+            .then(res => {
+                if (res) {
+                    toast.success('Create successfully!')
+                    handleClose();
+                }
+            })
     }
 
     return (
