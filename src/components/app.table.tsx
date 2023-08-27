@@ -1,35 +1,39 @@
 'use client'
 import Table from 'react-bootstrap/Table';
+import {Button} from 'react-bootstrap';
 
-const AppTable = () => {
+interface IProps {
+    blogs: IBlog[];
+}
+
+const AppTable = (props: IProps) => {
+    const {blogs} = props
+    console.log(blogs)
     return (
         <Table striped bordered hover>
             <thead>
             <tr>
-                <th>#</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Username</th>
+                <th>No</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Action</th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>1</td>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td colSpan={2}>Larry the Bird</td>
-                <td>@twitter</td>
-            </tr>
+            {blogs.length > 0 && blogs.map((item, index) => {
+                return (
+                    <tr key={`blog-${index}`}>
+                        <td>{item.id}</td>
+                        <td>{item.title}</td>
+                        <td>{item.author}</td>
+                        <td className='d-flex gap-2'>
+                            <Button variant={'success'}>View</Button>
+                            <Button variant={'warning'}>Update</Button>
+                            <Button variant={'danger'}>Delete</Button>
+                        </td>
+                    </tr>
+                )
+            })}
             </tbody>
         </Table>
     )

@@ -17,11 +17,10 @@ export default function Home() {
             revalidateOnReconnect: false
         }
     );
-    console.log(data)
+    if (!data) return <div>Loading...</div>
 
     return (
         <div>
-            <div>{data?.length}</div>
             <ul>
                 <li>
                     <Link className={x['red']} href="/facebook">
@@ -40,7 +39,9 @@ export default function Home() {
                     </Link>
                 </li>
             </ul>
-            <AppTable></AppTable>
+            <AppTable
+                blogs={data}
+            ></AppTable>
         </div>
     )
 }
