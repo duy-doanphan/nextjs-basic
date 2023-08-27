@@ -2,26 +2,40 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {toast} from "react-toastify";
-import { mutate } from "swr"
+import {mutate} from "swr"
 
 interface IProps {
     show: boolean;
     setShow: (value: boolean) => void;
+    blog: IBlog | null;
+    setBlog: (value: IBlog | null) => void;
 }
 
-const CreateModal = (props: IProps) => {
-    const {show, setShow} = props;
+const UpdateModal = (props: IProps) => {
+    const {show, setShow, blog, setBlog} = props;
 
+    const [id, setId] = useState<number>(0)
     const [title, setTitle] = useState<string>('')
     const [author, setAuthor] = useState<string>('')
     const [content, setContent] = useState<string>('')
 
+    useEffect(() => {
+        if (blog && blog.id) {
+            setId(blog.id)
+            setTitle(blog.title)
+            setAuthor(blog.author)
+            setContent(blog.content)
+        }
+    }, [blog])
+
     const handleReset = () => {
+        setId(0);
         setTitle('');
         setContent('');
         setAuthor('');
+        setBlog(null);
     }
     const handleClose = () => {
         setShow(false);
@@ -37,19 +51,19 @@ const CreateModal = (props: IProps) => {
             return
         }
 
-        fetch("http://localhost:8000/blogs",
+        fetch(`http://localhost:8000/blogs/${id}`,
             {
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                method: "POST",
+                method: "PUT",
                 body: JSON.stringify(dataBody)
             })
             .then(res => res.json())
             .then(res => {
                 if (res) {
-                    toast.success('Create successfully!')
+                    toast.success('Update successfully!')
                     handleClose();
                     mutate('http://localhost:8000/blogs')
                 }
@@ -66,7 +80,7 @@ const CreateModal = (props: IProps) => {
                 size={"lg"}
             >
                 <Modal.Header closeButton>
-                    <Modal.Title>Create a Blog</Modal.Title>
+                    <Modal.Title>Update a Blog</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
@@ -114,11 +128,11 @@ const CreateModal = (props: IProps) => {
                         onClick={() => {
                             handleSubmit()
                         }}
-                    >Create</Button>
+                    >Update</Button>
                 </Modal.Footer>
             </Modal>
         </>
     );
 };
 
-export default CreateModal;
+export default UpdateModal;

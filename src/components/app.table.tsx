@@ -3,6 +3,7 @@ import Table from 'react-bootstrap/Table';
 import {Button} from 'react-bootstrap';
 import CreateModal from "@/components/create.modal";
 import {useState} from "react";
+import UpdateModal from "@/components/update.modal";
 
 interface IProps {
     blogs: IBlog[];
@@ -10,9 +11,16 @@ interface IProps {
 
 const AppTable = (props: IProps) => {
     const {blogs} = props
-    const [showModalCreate, setShowModalCreate] = useState<boolean>(false);
 
+    const [showModalCreate, setShowModalCreate] = useState<boolean>(false);
+    const [showModalUpdate, setShowModalUpdate] = useState<boolean>(false);
+
+    const [blog, setBlog] = useState<IBlog | null>(null)
     const handleShowModalCreate = () => setShowModalCreate(true);
+    const handleShowModalUpdate = (item: IBlog) => {
+        setBlog(item)
+        setShowModalUpdate(true);
+    }
 
     return (
         <>
@@ -44,7 +52,12 @@ const AppTable = (props: IProps) => {
                             <td>{item.author}</td>
                             <td className='d-flex gap-2'>
                                 <Button variant={'success'}>View</Button>
-                                <Button variant={'warning'}>Update</Button>
+                                <Button
+                                    variant={'warning'}
+                                    onClick={() => {
+                                        handleShowModalUpdate(item)
+                                    }}
+                                >Update</Button>
                                 <Button variant={'danger'}>Delete</Button>
                             </td>
                         </tr>
@@ -56,6 +69,12 @@ const AppTable = (props: IProps) => {
                 show={showModalCreate}
                 setShow={setShowModalCreate}
             ></CreateModal>
+            <UpdateModal
+                show={showModalUpdate}
+                setShow={setShowModalUpdate}
+                blog={blog}
+                setBlog={setBlog}
+            ></UpdateModal>
         </>
 
     )
